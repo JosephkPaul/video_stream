@@ -116,7 +116,7 @@ def get_face_detector(modelFile=None,
 
     else:
         if modelFile == None:
-            modelFile = join(dirname(__file__), "static/res10_300x300_ssd_iter_140000.caffemodel") #join(dirname(__file__), )
+            modelFile = join(dirname(__file__), "res10_300x300_ssd_iter_140000.caffemodel") #join(dirname(__file__), )
         # = "res10_300x300_ssd_iter_140000.caffemodel"
         if configFile == None:
             configFile =join(dirname(__file__), "deploy.prototxt")    #join(dirname(__file__),)
