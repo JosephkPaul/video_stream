@@ -1,13 +1,15 @@
+import os
+from os.path import dirname, join
 from django.shortcuts import render
 from django.http.response import StreamingHttpResponse
-#from streamapp.camera import VideoCamera, IPWebCam, MaskDetect, LiveWebCam
 from streamapp.camera import VideoCamera
 from django.template.loader import render_to_string
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
 from django.template import loader, Context
+#path='/staticfiles'
 cloud_config= {
-        'secure_connect_bundle': "secure-connect-database.zip"
+        'secure_connect_bundle': join(dirname(__file__), "secure-connect-database.zip")
 }
 auth_provider = PlainTextAuthProvider('Datauser', 'database@1')
 cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)

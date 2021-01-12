@@ -1,5 +1,5 @@
 import cv2, os, urllib.request
-os.environ['TF_CPP_MIN_LOG_LEVEL']='3'
+
 import math
 import numpy as np
 import tensorflow as tf
@@ -9,26 +9,13 @@ from os.path import dirname, join
 from cassandra.cluster import Cluster
 from cassandra.auth import PlainTextAuthProvider
 
-cloud_config= {
-        'secure_connect_bundle': "D:/DeployDjangoFaceDetectorM/DeployDjangoFaceDetector/secure-connect-database.zip"
-}
-auth_provider = PlainTextAuthProvider('Datauser', 'database@1')
-cluster = Cluster(cloud=cloud_config, auth_provider=auth_provider)
-session = cluster.connect()
-
-row = session.execute("select release_version from system.local").one()
-if row:
-    print(row[0])
-else:
-    print("An error occurred.")
-
 
 def draw_faces(img, faces):
     for x, y, x1, y1 in faces:
         cv2.rectangle(img, (x, y), (x1, y1), (0, 0, 255), 3)
 
 
-def get_landmark_model(saved_model=join(dirname(__file__), 'pose_model')):
+def get_landmark_model(saved_model= join(dirname(__file__), 'pose_model')):
     model = keras.models.load_model(saved_model)
     return model
 
@@ -122,17 +109,17 @@ def get_face_detector(modelFile=None,
                       quantized=False):
     if quantized:
         if modelFile == None:
-            modelFile = "opencv_face_detector_uint8.pb"
+            modelFile = "static/opencv_face_detector_uint8.pb"
         if configFile == None:
-            configFile = "opencv_face_detector.pbtxt"
+            configFile = "static/opencv_face_detector.pbtxt"
         model = cv2.dnn.readNetFromTensorflow(modelFile, configFile)
 
     else:
         if modelFile == None:
-            modelFile = join(dirname(__file__), "res10_300x300_ssd_iter_140000.caffemodel")
+            modelFile = join(dirname(__file__), "static/res10_300x300_ssd_iter_140000.caffemodel") #join(dirname(__file__), )
         # = "res10_300x300_ssd_iter_140000.caffemodel"
         if configFile == None:
-            configFile = join(dirname(__file__), "deploy.prototxt")
+            configFile =join(dirname(__file__), "deploy.prototxt")    #join(dirname(__file__),)
         model = cv2.dnn.readNetFromCaffe(configFile, modelFile)
     return model
 
@@ -478,15 +465,5 @@ class VideoCamera(object):
                 cv2.putText(img, str(ang1), tuple(p1), font, 2, (128, 255, 255), 3)
                 cv2.putText(img, str(ang2), tuple(x1), font, 2, (255, 255, 128), 3)
             ret, jpeg = cv2.imencode('.jpg', img)
-
-            #cou=cou+1
-            #if cou==60:
-             #    print("datatatat")
-              #   session.set_keyspace('data')
             a=str(len(Ml))+" "+str(len(hul))+" "+str(len(hdl))+" "+str(len(hll))+" "+str(len(hrl))+" "+str(len(out))+" "+str(toll)
-        #     insert_statement = session.prepare("INSERT INTO userdata (id,marks) VALUES (?,?)")
-         #        session.execute(insert_statement, ["yuvaraj",str(a)])
-                 #self.video.release()
-          #       return jpeg.tobytes(),toll
-
             return jpeg.tobytes(),a
